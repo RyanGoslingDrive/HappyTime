@@ -4,17 +4,41 @@
 Были разработаны концепции страниц: Главная, О нас и меню игр.
 Были выбраны красочные цвета и неаккуратные детали под детский стиль.
 
+Доработан дизайн страниц Главная, О нас и переработаны страницы Игр.
+
 
 
 Дизайн страницы Главная:
-![HOME](https://github.com/user-attachments/assets/41d55101-d848-4b08-bc35-c4a732a9537c)
+![HOME](https://github.com/user-attachments/assets/907a41da-653b-4be0-82c4-e7892aacdd38)
+
 
 
 
 Дизайн стриницы О нас:
-![about us](https://github.com/user-attachments/assets/c2e6badc-6b01-4200-9835-9a2192ac10bd)
+![ABOUT US](https://github.com/user-attachments/assets/04d1c2f2-d2a4-43a7-99ab-d0b4fc72a05b)
 
 
 
-Дизайн страницы Игры:
-![games](https://github.com/user-attachments/assets/a8efa772-c094-4c70-9fbb-e55f7b43218f)
+
+Дизайн страниц Игр:
+![Макет игры в ЦВЕТА](https://github.com/user-attachments/assets/c97d3bf6-643c-4c60-ae1f-6dd774f80b47)
+![Макет игры в ЗВЕРЮШЕК](https://github.com/user-attachments/assets/dfa974b0-c9d2-493d-9c4b-bca75b28985f)
+
+
+Добавлена адаптивная верстка для всех страниц.
+Это было сделано для того, чтобы при любом разрешении монитора сайт отображался корректно и красиво.
+
+Так выглядит Главная страница и страница О нас при разрешении 2к:
+Все необходимые элементы остаются по середине, а различные фоны и фоновые картинки могут быть расположены по краям экрана для заполнения пространства.
+![HOME 2к](https://github.com/user-attachments/assets/df0b2cde-d245-436d-a19a-df51e165dda3)
+![ABOUT US 2к](https://github.com/user-attachments/assets/70b79629-eeea-4196-9eb9-596099518146)
+
+Также, при необходимости, адаптивность позволяет гибко изменять содержимое сайта. Например добавляя текст весь блок будет автоматически увеличиваться, соблюдая отступы:
+![ЦИТАТА](https://github.com/user-attachments/assets/6dfba1ad-a2b8-4f1d-81ac-9c261dfb5d22)
+![ЦИТАТА change](https://github.com/user-attachments/assets/2d37dd0e-08bd-402e-943e-e9ae39d2f71e)
+
+В самом блоке тоже имеется возможность переставлять блоки, как вам угодно:
+![ЦИТАТА change2](https://github.com/user-attachments/assets/50568952-4787-4142-b970-5d886c4ccdc5)
+
+Или мы вовсе можем поменять блоки местами перетащив нужный блок куда нам надо. И никто нам не запрещал брать блоки с других страниц нашего сайта:
+![HOME change](https://github.com/user-attachments/assets/7f84a596-56de-49dd-b3c5-b0e2d0fc1c66)
