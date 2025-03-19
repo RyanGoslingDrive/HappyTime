@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HappyTime</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="registr.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.prod.website-files.com/67c49b9c0d51e5ec84c55763/67cd6ab6a38cbd1a3a43f6d8_Icon_for_site.png" rel="shortcut icon" type="image/x-icon"/>
+        <link href="https://cdn.prod.website-files.com/67c49b9c0d51e5ec84c55763/67cd6aabc5839fca1838f7c5_Icon.png" rel="apple-touch-icon"/>
+    <script type="module" charset="UTF-8">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAgh5WcZwynKvGr_doAR_MMQaR4PdEsEv8",
+            authDomain: "happytime-df24e.firebaseapp.com",
+            projectId: "happytime-df24e",
+            storageBucket: "happytime-df24e.firebasestorage.app",
+            messagingSenderId: "98945928416",
+            appId: "1:98945928416:web:947cf319be00d2de3bd485",
+            measurementId: "G-TYB50CQ9K2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        function writeUserData(userId, email, password) {
+            const userRef = ref(database, 'users/' + userId);
+            set(userRef, {
+                email: email,
+                password: password,
+                time: 0 
+            })
+            .then(() => {
+                alert("Данные успешно сохранены!");
+                localStorage.setItem('userId', userId);
+                window.location.href = "acc.html";
+            })
+            .catch((error) => {
+                console.error("Ошибка при сохранении данных: ", error);
+                alert("Ошибка при сохранении данных: " + error.message);
+            });
+        }
+
+        function checkUserExists(email) {
+            const usersRef = ref(database, 'users/');
+            return get(usersRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const users = snapshot.val();
+                        for (const userId in users) {
+                            if (users[userId].email === email) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                });
+        }
+
+        function checkPassword(email, password) {
+            const usersRef = ref(database, 'users/');
+            return get(usersRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const users = snapshot.val();
+                        for (const userId in users) {
+                            if (users[userId].email === email && users[userId].password === password) {
+                                
+                                if (!users[userId].hasOwnProperty('time')) {
+                                    set(ref(database, 'users/' + userId), {
+                                        ...users[userId],
+                                        time: 0
+                                    });
+                                }
+                                localStorage.setItem('userId', userId);
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                });
+        }
+
+        function validateEmail(email) {
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            return emailPattern.test(email);
+        }
+
+        document.getElementById('create-button').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('Email-2').value;
+            const password = document.getElementById('Pass').value;
+
+            if (!email || !password) {
+                alert("Пожалуйста, заполните все поля.");
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                alert("Некорректный email");
+                return;
+            }
+
+            if (await checkUserExists(email)) {
+                alert("Аккаунт уже существует");
+                return;
+            }
+
+            const userId = Date.now().toString();
+            await writeUserData(userId, email, password);
+        });
+
+        document.getElementById('login-button').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('Email-2').value;
+            const password = document.getElementById('Pass').value;
+
+            if (!email || !password) {
+                alert("Пожалуйста, заполните все поля.");
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                alert("Некорректный email");
+                return;
+            }
+
+            if (await checkPassword(email, password)) {
+                window.location.href = "acc.html";
+            } else {
+                alert("Неверный email или пароль");
+            }
+        });
+    </script>
+</head>
+<body>
+    <section class="reg">
+        <div class="reg-container">
+            <a href="home.html">
+                <img src="https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049.png" loading="lazy" sizes="(max-width: 7035px) 100vw, 7035px" srcset="https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-500.png 500w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-800.png 800w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-1080.png 1080w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-1600.png 1600w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-2000.png 2000w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-2600.png 2600w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-3200.png 3200w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049.png 7035w" alt="" class="image"/>
+            </a>
+            <div class="w-form">
+                <form id="email-form" name="email-form" data-name="Email Form" method="get" class="form">
+                    <div class="reg-textblock">
+                        <div class="form-sec">
+                            <label for="Email-2" class="field-label">Почта</label>
+                            <input class="text-field w-input" maxlength="256" name="Email" data-name="Email" placeholder="Введите вашу почту" type="email" id="Email-2"/>
+                        </div>
+                        <div class="form-sec">
+                            <label for="Pass" class="field-label-2">Пароль</label>
+                            <input class="text-field-2 w-input" maxlength="256" name="Pass" data-name="Pass" placeholder="Введите ваш пароль" type="password" id="Pass" required=""/>
+                        </div>
+                    </div>
+                    <div class="reg-buttons">
+                        <input type="submit" data-wait="Please wait..." class="submit-button w-button" value="Войти" id="login-button"/>
+                        <input type="button" class="submit-button w-button" value="Создать" id="create-button"/>
+                    </div>
+                </form>
+            </div>
+            <div class="hero-heading__text">
+                F<br/>
+                F<br/>
+                F<br/>
+                F<br/>
+                F<br/>
+            </div>
+        </div>
+        <div class="image-reg"></div>
+    </section>
+</body>
+</html>

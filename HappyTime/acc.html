@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html data-wf-domain="diplom-a6f270.webflow.io" data-wf-page="67d68d4a7898d97e5c41b21d" data-wf-site="67d68d4a7898d97e5c41b216" data-wf-status="1">
+<head>
+    <meta charset="utf-8"/>
+    <title>HappyTime</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="Webflow" name="generator"/>
+    <link href="acc.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.prod.website-files.com/67c49b9c0d51e5ec84c55763/67cd6ab6a38cbd1a3a43f6d8_Icon_for_site.png" rel="shortcut icon" type="image/x-icon"/>
+    <link href="https://cdn.prod.website-files.com/67c49b9c0d51e5ec84c55763/67cd6aabc5839fca1838f7c5_Icon.png" rel="apple-touch-icon"/>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js"></script>
+</head>
+<body>
+<section class="reg">
+    <div class="reg-container">
+        <a href="home.html">
+            <img src="https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049.png" loading="lazy" sizes="(max-width: 7035px) 100vw, 7035px" srcset="https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-500.png 500w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-800.png 800w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-1080.png 1080w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-1600.png 1600w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-2000.png 2000w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-2600.png 2600w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049-p-3200.png 3200w, https://cdn.prod.website-files.com/67d68d4a7898d97e5c41b216/67d69ae437ff54b81d1881a4_Vector2049.png 7035w" alt="" class="image"/>
+        </a>
+        <div class="info">
+            <div class="info-stroke m-mail">
+                <div class="hero-heading__text m-black">Ваша почта:</div>
+                <div class="hero-heading__text m-black" id="user-email">Mail.ru</div>
+            </div>
+            <div class="section-reg">
+                <div class="info-stroke">
+                    <div class="hero-heading__text m-black m-color">Время в играх:</div>
+                    <div class="hero-heading__text m-black m-color" id="animalsResult">0 сек.</div>
+                </div>
+            </div>
+        </div>
+        <a data-w-id="43d8022c-bf10-8990-a47b-101ccb17ae25" href="#" class="hero-heading__button" id="logout-button">Выйти из аккаунта</a>
+    </div>
+    <div class="image-reg"></div>
+</section>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAgh5WcZwynKvGr_doAR_MMQaR4PdEsEv8",
+        authDomain: "happytime-df24e.firebaseapp.com",
+        projectId: "happytime-df24e",
+        storageBucket: "happytime-df24e.firebasestorage.app",
+        messagingSenderId: "98945928416",
+        appId: "1:98945928416:web:947cf319be00d2de3bd485",
+        measurementId: "G-TYB50CQ9K2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const userId = localStorage.getItem('userId');
+
+    async function getUserData(userId) {
+        try {
+            const userRef = ref(database, 'users/' + userId);
+            const snapshot = await get(userRef);
+            return snapshot.exists() ? snapshot.val() : null;
+        } catch (error) {
+            console.error("Ошибка при получении данных пользователя: ", error);
+            return null;
+        }
+    }
+
+    if (userId) {
+        const userData = await getUserData(userId);
+        const emailElement = document.getElementById('user-email');
+        if (userData && emailElement) {
+            emailElement.textContent = userData.email || 'Почта не найдена';
+        }
+    } else {
+        document.getElementById('user-email').textContent = 'Пользователь не авторизован';
+        document.getElementById('logout-button').textContent = 'Зарегистрироваться';
+    }
+
+    let timeSpent = 0;
+
+    async function getInitialTime() {
+        if (!userId) return;
+        try {
+            const db = getDatabase();
+            const userRef = ref(db, `users/${userId}`);
+            const snapshot = await get(userRef);
+            const userData = snapshot.val() || {};
+            timeSpent = parseInt(userData.time || 0); 
+            document.getElementById('animalsResult').textContent = `${timeSpent} сек.`; 
+        } catch (error) {
+            console.error('Ошибка получения начального времени:', error);
+        }
+    }
+
+    getInitialTime();
+
+    document.getElementById('logout-button').addEventListener('click', function (event) {
+        event.preventDefault();
+        if (userId) {
+            localStorage.removeItem('userId');
+            window.location.href = "registr.html";
+        } else {
+            window.location.href = "registr.html";
+        }
+    });
+</script>
+
+</body>
+</html>
